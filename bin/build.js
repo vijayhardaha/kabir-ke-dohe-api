@@ -163,7 +163,7 @@ const ensureDataDirectoryExists = () => {
 					return {
 						slug: slugifiedTag,
 						name: tag,
-						tagCount: tagData ? tagData.count : 0, // Add the count for the tag
+						count: tagData ? tagData.count : 0,
 					};
 				}),
 			};
