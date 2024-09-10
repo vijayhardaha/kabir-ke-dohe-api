@@ -12,6 +12,11 @@ export const filterBySearch = (data, search, exactMatch, searchWithin) => {
 	if (!search) return data;
 
 	const searchLower = search.toLowerCase();
+	const searchTerms = searchLower
+		.split(" ")
+		.map((st) => st.trim())
+		.filter((term) => term.length > 0);
+
 	let fieldsToSearch = [];
 
 	// Define fields to search in
@@ -37,13 +42,46 @@ export const filterBySearch = (data, search, exactMatch, searchWithin) => {
 		}
 	}
 
-	return toBool(exactMatch)
-		? data.filter((post) => fieldsToSearch.some((field) => post[field]?.toLowerCase() === searchLower))
-		: data.filter((post) =>
-				fieldsToSearch.some((field) =>
-					searchLower.split(" ").every((term) => post[field]?.toLowerCase().includes(term))
-				)
-			);
+	// Filter data based on the whole search string
+	const exactMatchResults = data.filter((item) =>
+		fieldsToSearch.some((field) => item[field]?.toLowerCase().includes(searchLower))
+	);
+
+	// If exactMatch is false, filter based on individual search terms
+	let partialMatchResults = [];
+	if (!toBool(exactMatch)) {
+		partialMatchResults = data.filter((item) =>
+			searchTerms.some((term) => fieldsToSearch.some((field) => item[field]?.toLowerCase().includes(term)))
+		);
+	}
+
+	// Merge exactMatchResults and partialMatchResults, ensuring uniqueness
+	const uniqueItemsMap = new Map();
+
+	[...exactMatchResults, ...partialMatchResults].forEach((item) => {
+		// Use a unique identifier to ensure uniqueness, e.g., 'id'
+		const itemId = item.id || JSON.stringify(item); // Use `id` if available, otherwise stringify the item
+		if (!uniqueItemsMap.has(itemId)) {
+			uniqueItemsMap.set(itemId, item);
+		}
+	});
+
+	// Convert the Map values to an array
+	const mergedUniqueResults = Array.from(uniqueItemsMap.values());
+
+	// Sort filtered data: exact matches first, then partial matches
+	return mergedUniqueResults.sort((a, b) => {
+		const aMatchesExact = fieldsToSearch.some((field) => a[field]?.toLowerCase().includes(searchLower));
+		const bMatchesExact = fieldsToSearch.some((field) => b[field]?.toLowerCase().includes(searchLower));
+
+		if (aMatchesExact && !bMatchesExact) {
+			return -1; // `a` should come before `b`
+		}
+		if (!aMatchesExact && bMatchesExact) {
+			return 1; // `b` should come before `a`
+		}
+		return 0; // Leave the order unchanged if both are either exact matches or both are partial matches
+	});
 };
 
 /**
