@@ -63,6 +63,9 @@ export function getData({
 }) {
 	let data = loadData(); // Load the initial dataset
 
+	// Apply sorting
+	data = sortData(data, orderBy, order);
+
 	// Apply search filtering
 	data = filterBySearch(data, s, exactMatch, searchWithin);
 
@@ -71,9 +74,6 @@ export function getData({
 
 	// Apply popularity filtering
 	data = filterByPopularity(data, popular);
-
-	// Apply sorting
-	data = sortData(data, orderBy, order);
 
 	// Apply pagination
 	return paginateData(data, page, perPage, pagination);
