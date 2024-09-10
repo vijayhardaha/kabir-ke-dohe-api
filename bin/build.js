@@ -1,6 +1,5 @@
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 
 import dotenv from "dotenv";
 import { JWT } from "google-auth-library";
@@ -10,10 +9,6 @@ import ora from "ora";
 import { mapCsvDataToJson, cleanString, createSlug, generateShortHash, padIndex, parseAndUniqueList } from "./utils.js";
 
 dotenv.config({ path: ".env.local" });
-
-// Get the __dirname equivalent in ESM
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 /**
  * Creates and returns a JWT client for Google APIs.
@@ -85,7 +80,7 @@ const getGoogleSheetData = async (sheetName) => {
  * Ensures that the 'data' directory exists. If not, it creates it.
  */
 const ensureDataDirectoryExists = () => {
-	const dataDirPath = path.join(__dirname, "../data");
+	const dataDirPath = path.join(process.cwd(), "data");
 	if (!fs.existsSync(dataDirPath)) {
 		fs.mkdirSync(dataDirPath);
 	}
@@ -175,7 +170,7 @@ const ensureDataDirectoryExists = () => {
 		});
 
 		// Save processed data to file
-		const coupletsFilePath = path.join(__dirname, "../data/couplets.json");
+		const coupletsFilePath = path.join(process.cwd(), "data/couplets.json");
 		fs.writeFileSync(coupletsFilePath, JSON.stringify(processedData, null, 2));
 
 		spinner.succeed("Data fetched and saved to data/couplets.json");

@@ -1,12 +1,7 @@
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 
 import { filterBySearch, filterByTags, filterByPopularity, sortData, paginateData } from "./filters.js";
-
-// Get the __dirname equivalent in ESM
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 /**
  * Loads couplets data from a JSON file.
@@ -19,7 +14,7 @@ const __dirname = path.dirname(__filename);
  */
 function loadData() {
 	// Construct the path to the 'couplets.json' file in the 'data' directory
-	const filePath = path.join(__dirname, "../data/couplets.json");
+	const filePath = path.join(process.cwd(), "data/couplets.json");
 
 	try {
 		// Read the file content as a string
