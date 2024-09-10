@@ -1,3 +1,5 @@
+import { toBool } from "./utils.js";
+
 /**
  * Filters data based on search terms and specified fields.
  * @param {Array<Object>} data - The data to be filtered.
@@ -35,7 +37,7 @@ export const filterBySearch = (data, search, exactMatch, searchWithin) => {
 		}
 	}
 
-	return exactMatch
+	return toBool(exactMatch)
 		? data.filter((post) => fieldsToSearch.some((field) => post[field]?.toLowerCase() === searchLower))
 		: data.filter((post) =>
 				fieldsToSearch.some((field) =>
@@ -64,8 +66,8 @@ export const filterByTags = (data, tags) => {
  * @returns {Array<Object>} The filtered data.
  */
 export const filterByPopularity = (data, popular) => {
-	if (popular === false) return data;
-	return data.filter((post) => post.popular === popular);
+	if (toBool(popular) === false) return data;
+	return data.filter((post) => toBool(post.popular) === toBool(popular));
 };
 
 /**
@@ -129,7 +131,7 @@ export const sortData = (data, orderBy, order) => {
  * @returns {Object} The paginated data along with pagination details.
  */
 export const paginateData = (data, page, perPage, pagination) => {
-	const isPaginationEnabled = typeof pagination === "boolean" ? pagination : pagination === "true";
+	const isPaginationEnabled = toBool(pagination);
 
 	if (perPage === -1) perPage = data.length;
 	if (perPage <= 0 || isNaN(perPage)) perPage = 10;
