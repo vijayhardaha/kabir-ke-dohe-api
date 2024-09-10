@@ -1,0 +1,40 @@
+{
+	"name": "kabir-ke-dohe-api",
+	"version": "1.0.0",
+	"description": "An Express.js API for fetching and filtering Kabir's dohas, hosted on Vercel.",
+	"type": "module",
+	"main": "src/index.js",
+	"scripts": {
+		"start": "node src/index.js",
+		"build": "node bin/build.js",
+		"lint": "eslint . --ext .js",
+		"format": "eslint . --ext .js --fix"
+	},
+	"keywords": [
+		"Kabir",
+		"dohe",
+		"Express",
+		"API",
+		"Vercel"
+	],
+	"author": "",
+	"license": "MIT",
+	"dependencies": {
+		"dotenv": "^16.1.4",
+		"express": "^5.0.0",
+		"google-auth-library": "^9.14.1",
+		"google-spreadsheet": "^4.1.4"
+	},
+	"devDependencies": {
+		"@babel/eslint-parser": "^7.25.1",
+		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-import": "^2.30.0",
+		"eslint-plugin-jsx-a11y": "^6.10.0",
+		"eslint-plugin-prettier": "^5.2.1",
+		"eslint": "^8.57.0",
+		"latinize": "^2.0.0",
+		"ora": "^8.1.0",
+		"prettier": "^3.3.3",
+		"slugify": "^1.6.6"
+	}
+}
