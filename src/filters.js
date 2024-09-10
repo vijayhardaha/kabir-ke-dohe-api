@@ -171,11 +171,15 @@ export const sortData = (data, orderBy, order) => {
 export const paginateData = (data, page, perPage, pagination) => {
 	const isPaginationEnabled = toBool(pagination);
 
-	if (perPage === -1) perPage = data.length;
-	if (perPage <= 0 || isNaN(perPage)) perPage = 10;
+	let limit = Number(perPage);
 
-	const pageNumber = Math.max(parseInt(page, 10) || 1, 1);
-	const limit = parseInt(perPage, 10);
+	if (limit === -1) {
+		limit = data.length;
+	}
+
+	if (limit <= 0 || isNaN(limit)) limit = 10;
+
+	const pageNumber = Math.max(Number(page) || 1, 1);
 	const start = (pageNumber - 1) * limit;
 	const end = start + limit;
 	const total = data.length;
