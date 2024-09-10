@@ -67,5 +67,4 @@ $RECYCLE.BIN/
 .nfs*
 
 # Ignore the data directory
-/data
 .vercel
